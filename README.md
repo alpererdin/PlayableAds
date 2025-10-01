@@ -1,12 +1,12 @@
-# Welcome to Playable Factory 🚀
+# Playable Factory Case Study
 
-## 🚀 Getting Started
+A JavaScript-based interactive web application for a playable ad.
 
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/)
 
-### 🛠 Installation and Setup
+### Installation and Setup
 
 #### 1. **Install Packages**
 npm install
