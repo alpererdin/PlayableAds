@@ -1,7 +1,7 @@
 
 https://alpererdin.github.io/PlayableAds/
 
-# Playable Factory Case Study
+# Case Study
 
 A JavaScript-based interactive web application for a playable ad.
 
