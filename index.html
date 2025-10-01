@@ -1,0 +1,392 @@
+<!doctype html><head><title>The Word Game</title><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><style>body,
+    html {
+      margin: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      overflow: hidden;
+      z-index: -1;
+      background: #1e1e37;
+    }
+    #logo {
+        width: 100%;
+      max-width: 150px;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 50000!important;
+    }
+
+    #bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+
+      z-index: -1;
+      background: url('./assets/core/pattern.png') repeat center center fixed;
+    }
+    .shuffle-symbol {
+    -webkit-tap-highlight-color: transparent; 
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 2em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    user-select: none; 
+    z-index: 10;
+   
+}
+.shuffle-symbol.disabled {
+    pointer-events: none;  
+    opacity: 0.6;  
+}
+
+.letter {
+    -webkit-tap-highlight-color: transparent; 
+    user-select: none; 
+    cursor: pointer;
+    position: absolute;
+    font-size: 1.5em;
+    font-weight: bold;
+    transition: top 0.5s ease, left 0.5s ease;
+    z-index: 9999 !important;
+    color: rgb(241, 136, 0);
+    font-size: 45px;
+    font-family: 'Sniglet', sans-serif;
+
+}
+.letter.visited {
+    position: absolute;
+    opacity: 1 !important;
+    z-index: 9999 !important;
+}
+ 
+.letter::after {
+    content: '';
+    position: absolute;
+    top: 50%;   
+    left: 50%;  
+    width: 50px;  
+    height: 50px; 
+    background-color: rgb(241, 136, 0);  
+     
+    border-radius: 50%; 
+    transform: translate(-50%, -50%); 
+    z-index: -1; 
+    opacity: 0;
+}
+.letter.hide-circle::after {
+    opacity: 0; 
+}
+.letter.show-circle::after {
+    opacity: 1; 
+}
+.letter.disabled {
+  position: absolute;
+  z-index: 5;
+    pointer-events: all;  
+    opacity: 0;  
+    color: white;
+    cursor: default;
+}
+.letter.animated {
+  position: absolute;
+  z-index: 5;
+    pointer-events: none!important;
+    opacity: 0.6;  
+    color: rgb(154, 114, 14)!important;
+    cursor: default;
+}
+.letter.enabled {
+  
+    pointer-events: all;  
+    opacity: 1;  
+    color: rgb(241, 136, 0);
+    z-index: 5;
+}
+ /*top*/
+ 
+#letter1 {
+    top: 10%; 
+    left: 45%;
+}
+/*right*/
+#letter2 {
+    top:36%;
+    left: 70%;  
+   
+}
+#letter3 {
+    top: 62%;  
+    left: 45%;
+  
+  
+}
+#letter4 {
+    top:36%;
+    left: 19%;  
+ 
+}
+.shuffle-symbol img {
+    width: 40px;  
+    height: 40px;
+    /*user-select: none !important;  */
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+.shuffle-symbol.disabled img { 
+    opacity: 0.5; 
+}
+
+#text-output{
+    position: absolute;
+    top: -55px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto; 
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: #ff8000; 
+    color: white;
+    pointer-events: none; 
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+    text-align: center;
+    font-family: 'Sniglet', sans-serif;
+    font-size: 40px;
+    font-weight: bold; 
+    border-radius: 10%; 
+    opacity: 1;  
+}
+@keyframes shake {
+   
+    0% { transform: translateX(-50%); }
+    25% { transform: translateX(-48%); }    
+    50% { transform: translateX(-52%); }  
+    75% { transform: translateX(-48%); }   
+    100% { transform: translateX(-50%); }  
+}
+
+
+#text-output.shake {
+   
+    animation: shake 0.2s;  
+}
+#text-output.disabled {
+   
+    background-color: #ff800000; 
+   /*opacity: 0;*/  
+}
+
+@font-face {
+    font-family: 'Sniglet';
+    src: url('assets/Sniglet-Regular.ttf') format('truetype');  
+}
+
+#game_area {
+    border: 4px solid black;  
+    box-sizing: border-box; 
+    background: url('./assets/bg.png') no-repeat center center fixed;
+    background-size: contain;
+    display: flex;
+    flex-direction: column;
+    background-color: #17f30b00;
+    text-align: center;
+    margin: auto;
+    position: absolute;
+    width: 480px !important; 
+    height: 800px !important;  
+    z-index: 0;
+    opacity: 1;
+    justify-content: flex-end;  
+    align-items: center;
+}
+#shuffle-container {
+    position: fixed;
+    width: 200px !important;  
+    height: 200px !important; 
+    min-width: unset !important;  
+    min-height: unset !important;  
+    aspect-ratio: unset !important;  
+    padding: 10px;
+    z-index: 9888;
+   
+    background-size: cover; 
+    background-position: center;
+    background-color: rgba(255, 12, 12, 0);
+    margin-bottom: 100px; 
+    
+    
+}
+#circle-container {
+    position: absolute;  
+    width: 200px !important;  
+    height: 200px !important; 
+    min-width: unset !important;  
+    min-height: unset !important;  
+    aspect-ratio: unset !important;  
+    padding: 10px;
+    z-index: 1;
+    background-image: url('assets/myCircle.png');
+    opacity: 0.5;
+    background-size: cover; 
+    background-position: center;
+    background-color: rgba(255, 12, 12, 0);
+    margin-bottom: 20px; 
+    top: 0;  
+    left: 0;  
+}
+#drawing-container {
+    position: absolute;
+    pointer-events: none;
+    z-index:50 !important;
+    background-color: rgba(20, 4, 243, 0);
+    width: 480px !important; 
+    height: 800px !important;  
+}
+#line {
+    position: fixed;
+    width: 20px; 
+    background-color: #d58a08; 
+    pointer-events: none; 
+    transform-origin: top left; 
+    z-index: 50 !important;
+}
+.drawing-line {
+   
+    height: 10px !important;
+     
+}
+.no-click {
+    pointer-events: none;  
+}
+
+#blocker-container {
+    border: 4px solid black;  
+    box-sizing: border-box; 
+    display: flex;
+    flex-direction: column;
+    background-color: #0dff0000;
+    text-align: center;
+    margin: auto;
+    position: fixed;
+    width: 480px !important; 
+    height: 800px !important;  
+    z-index: 0 !important; 
+    opacity: 1;
+    justify-content: flex-end;  
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#blocker-container.enabled {
+    z-index: 99999 !important; 
+    background-color: rgba(13, 255, 0, 0); 
+    opacity: 1;
+    pointer-events: auto;
+}
+#blocker-container.disabled {
+    z-index: -1 !important; 
+    background-color: rgba(13, 255, 0, 0);
+    opacity: 0;
+    pointer-events: none;
+}
+ 
+#grid-container {
+    position: relative;
+    top:-400px;
+    left: -50px;
+    display: grid;
+    gap: 10px;  
+ 
+}
+ 
+.grid-item {
+  width: 70px;
+  height: 70px;
+  background-color: #cdcacacb;  
+  border-radius: 13px;  
+}
+#after_area {
+    
+    border: 4px solid rgba(0, 0, 0, 0.621);  
+    box-sizing: border-box; 
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.621);  
+    text-align: center;
+    margin: auto;
+    position: absolute;
+    width: 480px !important; 
+    height: 800px !important;  
+    z-index: 0 !important;  
+    opacity: 0;
+    justify-content: flex-end;  
+    align-items: center;
+    transition: opacity 0.3s;
+}
+
+#after_area.enabled { 
+    opacity: 1; 
+    z-index: 20000 !important;  
+}
+#play-now {
+    position: absolute;
+    width: 200px;  
+    height: 50px;   
+    z-index: 99999999 !important;
+    margin-bottom: 20px; 
+    opacity: 1;   
+    overflow: hidden;
+    box-sizing: border-box;
+    background-color: rgba(24, 24, 24, 0.41);  
+    border-radius: 20px; 
+    border: 4px solid white;  
+    display: flex; 
+    justify-content: center;  
+    align-items: center;  
+    color: white;  
+    font-size: 33px;
+    text-decoration: none; 
+    font-family: 'Sniglet', sans-serif;
+  
+    pointer-events: all;
+    bottom:2%;
+    scale: scale(1);  
+    transition: all 1s ease-in-out;
+    animation: pulse 1s infinite alternate;
+}
+#play-now.mover {
+    bottom: 30%;
+    animation: none;
+    transition: transform 1s ease-in-out;
+    animation: pulseScaled 1s infinite alternate;
+ 
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);  
+    }
+    100% {
+        transform: scale(1.1);  
+    }
+}
+ 
+@keyframes pulseScaled {
+    0% {
+        transform: scale(1.5);
+    }
+    100% {
+        transform:  scale(1.65);  
+    }
+}</style></head><body><div id="bg"></div><img id="logo" src="./assets//core/logo_white.png" alt="loading"><div id="game_area"><div id="shuffle-container"><div id="blocker-container"></div><div id="circle-container"></div><span class="letter" id="letter1">.</span> <span class="letter" id="letter2">.</span> <span class="shuffle-symbol" id="shuffle-symbol"><img src="./assets/suffle.png" alt="Shuffle Icon"/></span><span class="letter" id="letter3">.</span> <span class="letter" id="letter4">.</span><div id="helper"></div><div id="drawing-container"></div><div id="text-output" class="text-output"></div><div id="grid-container"><div class="grid-item"></div></div></div><a id="play-now" href="https://playablefactory.com/" target="_blank">PLAY NOW!</a><div id="after_area"></div></div><script defer="defer" src="vendor.9dcf08327fe9205e648d.js"></script><script defer="defer" src="main.134f14bd5f4fb1e7a826.js"></script></body>
